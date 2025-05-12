@@ -141,8 +141,7 @@ Ingresamos los datos del nuevo usuario y con su - obtenemos privilegios de root
 
 ## Docker
 
-https://docs.docker.com/engine/install/ubuntu/
-Desde la pagina oficial, en su documentación seguiremos la guía para instalar Docker. En esta distribución no 
+Desde la pagina oficial, en su [documentación](https://docs.docker.com/engine/install/ubuntu/) seguiremos la guía para instalar Docker. En esta distribución no 
 tenemos interfaz gráfica, por lo que no necesitamos Docker desktop.
 
 Ejecutamos los siguientes comandos uno a uno, para configurar el repositorio.
@@ -179,11 +178,13 @@ Podemos comprobar el éxito de la instalación ejecutando
 
 Git nos facilitara la tarea de descargar proyectos que busquemos desplegar. Ejecutamos en orden los siguientes comandos para instalar GIT
 
+```java
 sudo apt update
 
 sudo apt install git
 
 git --version
+```
 
 
 <br>
@@ -192,7 +193,7 @@ git --version
 
 Hacemos pull o clonando el proyecto con el siguiente comando, para traer la rama especifica
 
-git clone -b <branchname> <remote-repo-url>
+`git clone -b <branchname> <remote-repo-url>`
 
 Descargaremos frontend y backend
 
@@ -204,6 +205,7 @@ Los siguientes archivos son esenciales para el despliegue del contenedor de la A
 
 #### Dockerfile
 
+```java
 # Usa Java 21 (Temurin LTS)
 FROM eclipse-temurin:21-jdk-jammy
 
@@ -239,11 +241,13 @@ VOLUME /app/uploads
 
 # Reemplaza el ENTRYPOINT original por nuestro script
 ENTRYPOINT ["/entrypoint.sh"]
+```
 
 <br>
 
 Creamos entrypoint.sh a la altura del dockerfile
 
+```java
 #!/bin/sh
 
 # Configuración de seguridad base
@@ -263,12 +267,13 @@ echo "🔍 Variables: SEED_DB=$SEED_DB, ARGS=$ARGS"
 
 # Inicia la aplicación
 exec java $JAVA_OPTS -jar sinaloa-api.jar $ARGS
-
+```
 
 <br>
 
 .env de API (a lado del dockerfile)
 
+```java
 # ===== DATABASE =====
 DB_USER=<tu-user>
 DB_PASSWORD=<tu-user>
@@ -294,6 +299,7 @@ SMTP_PASSWORD=<tu-password>
 
 # ===== APP =====
 UPLOAD_DIR=/app/uploads
+```
 
 
 
@@ -304,6 +310,7 @@ UPLOAD_DIR=/app/uploads
 
 #### Dockerfile de frontend
 
+```java
 # Etapa de construcción
 FROM node:20-alpine AS builder
 WORKDIR /app
@@ -334,10 +341,11 @@ EXPOSE 80
 # Usar el script de espera como entrypoint
 ENTRYPOINT ["/wait-for-api.sh"]
 CMD ["nginx", "-g", "daemon off;"]
-
+```
 
 #### nginx.conf para configurar proxy
 
+```java
 server {
     listen 80;
     server_name localhost;
@@ -376,6 +384,7 @@ server {
         add_header Cache-Control "public, no-transform";
     }
 }
+```
 
 
 
@@ -383,6 +392,7 @@ server {
 
 Se ejecutara desde el dockerfile en sincronia con el despliegue de la API
 
+```java
 #!/bin/sh
 
 host="sinaloa-api"
@@ -396,16 +406,17 @@ done
 
 echo "API está disponible - iniciando Nginx"
 exec "$@"
-
+```
 
 
 #### .env
 
 Variables de entorno del frontend
 
+```java
 VITE_MODE=dev
 VITE_API_URL=http://146.190.171.239:8080/api
-
+```
 
 
 
@@ -422,6 +433,7 @@ proyecto - docker-compose.yml
 
 <br>
 
+```java
 services:
 
   sinaloa-api:
@@ -485,6 +497,7 @@ services:
 networks:
   sinaloa-net:
     driver: bridge
+```
 
 <br>
 
@@ -494,13 +507,15 @@ Con nuestros dockerfile crearemos las imágenes, que nos servirán como template
 
 Necesitaremos la imagen de MySQL. Podemos ir a Dockerhub a buscarla
 
-Ejecutamos: docker pull mysql:8.0
+Ejecutamos: `docker pull mysql:8.0`
 
 Después ejecutamos en la misma carpeta donde se encuentran los dockerfile de frontend y backend los siguientes comandos
 
+```java
 docker build -t sinaloa-frontend . --no-cache
 
 docker build -t sinaloa-api . --no-cache
+```
 
 <br>
 
@@ -509,21 +524,31 @@ docker build -t sinaloa-api . --no-cache
 En la misma carpeta donde tenemos el docker-compose.yml ejecutamos
 Docker compose up -d
 
-![]()
+<br>
 
-Con docker compose ps podemos observar el estado de los contenedores recién creados (si fallo alguno no se listara)
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/35f61978793565c552f7afb7eb404bcb5a96b9b9/screenshots/docker-host/70%20-%20compose%20everything.png" alt="compose up" width="600">
 
-Para mas detalle podemos ejecutar:
+<br>
 
-Para logs del frontend
-docker compose logs -f sinaloa-frontend
+Para observar los logs del frontend
+`docker compose logs -f sinaloa-frontend`
 
-Para logs del backend
-docker compose logs -f sinaloa-api
+<br>
+
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/35f61978793565c552f7afb7eb404bcb5a96b9b9/screenshots/docker-host/92%20-%20logs%20frontend.png" alt="logs frontend" width="600">
+
+<br>
+
+Para acceder a los logs del backend
+`docker compose logs -f sinaloa-api`
 
 Lo que nos permitirá dar seguimiento a toda la actividad de nuestros contenedores activos
 
+<br>
 
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/35f61978793565c552f7afb7eb404bcb5a96b9b9/screenshots/docker-host/71%20-%20apo%20logs%20with%20seeders.png" alt="logs api" width="600">
+
+<br>
 
 
 ### Resultados
@@ -532,7 +557,7 @@ Desde Insomnia podemos probar los endpoints individuales
 
 <br>
 
-<img src="" alt="" width="500">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/35f61978793565c552f7afb7eb404bcb5a96b9b9/screenshots/docker-host/90-%20test%20login%20insomnia.png" alt="auth" width="500">
 
 <br>
 
@@ -540,13 +565,21 @@ Desde el navegador accedemos al cliente y probar toda la aplicación
 
 <br>
 
-<img src="" alt="" width="500">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/35f61978793565c552f7afb7eb404bcb5a96b9b9/screenshots/docker-host/93%20-%20Client%20access.png" alt="client" width="500">
+
+<br>
+
+La herramienta DevTools de nuestro navegador nos ayudara mucho en el proceso de pruebas
+
+<br>
+
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/35f61978793565c552f7afb7eb404bcb5a96b9b9/screenshots/docker-host/93%20-%20devtools.png" alt="devtools" width="500">
 
 <br>
 
 Uso de la aplicación
-Reproducir video
-https://drive.google.com/file/d/1JTBbc5S4gy5f4oBAULyYhLpmXiG3acIq/view?usp=sharing
+[Video de aplicación web hosteada](https://drive.google.com/file/d/1JTBbc5S4gy5f4oBAULyYhLpmXiG3acIq/view?usp=sharing)
+
 
 
 
