@@ -427,10 +427,6 @@ VITE_API_URL=http://146.190.171.239:8080/api
 
 Un nivel superior de los proyectos de frontend y backend
 
-proyecto - docker-compose.yml
-  |_frontend
-  |_backend
-
 <br>
 
 ```java
