@@ -1,0 +1,30 @@
+# Etapa de construcción
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+COPY .env ./.env
+
+COPY . .
+RUN yarn build
+
+# Etapa de producción
+FROM nginx:alpine
+
+# Instalar netcat (nc) para el script de espera
+RUN apk add --no-cache bash netcat-openbsd
+
+# Copiar el script de espera
+COPY wait-for-api.sh /wait-for-api.sh
+RUN chmod +x /wait-for-api.sh
+
+# Copiar los archivos de construcción y configuración de Nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+# Usar el script de espera como entrypoint
+ENTRYPOINT ["/wait-for-api.sh"]
+CMD ["nginx", "-g", "daemon off;"]

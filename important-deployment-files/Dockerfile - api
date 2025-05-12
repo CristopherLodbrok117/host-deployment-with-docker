@@ -1,0 +1,35 @@
+# Usa Java 21 (Temurin LTS)
+FROM eclipse-temurin:21-jdk-jammy
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Copia el wrapper de Maven
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+COPY .env /app/.env
+
+# Otorga permisos
+RUN chmod +x mvnw
+
+# Descarga dependencias en caché
+RUN ./mvnw dependency:go-offline -B
+
+# Copia el código fuente y el entrypoint
+COPY src/ src/
+COPY entrypoint.sh /entrypoint.sh
+
+# Permisos para el entrypoint y compilación
+RUN chmod +x /entrypoint.sh && \
+    ./mvnw clean package -DskipTests && \
+    mv target/*.jar /app/sinaloa-api.jar && \
+    rm -rf target/ .mvn/ mvnw* pom.xml
+
+# Puerto expuesto
+EXPOSE 8080
+
+# Volumen para uploads
+VOLUME /app/uploads
+
+# Reemplaza el ENTRYPOINT original por nuestro script
+ENTRYPOINT ["/entrypoint.sh"]

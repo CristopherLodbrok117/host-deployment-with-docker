@@ -1,0 +1,63 @@
+services:
+
+  sinaloa-api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: sinaloa-api
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"  # Cambiado a puerto estándar
+    networks:
+      - sinaloa-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/sinaloa_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-unusuario}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-contrasenacompleja}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate  # Mejor que create-drop en producción
+      SERVER_PORT: 8080
+      SERVER_ADDRESS: 0.0.0.0
+      SEED_DB: true
+      FRONTEND_URL: http://sinaloa-frontend:80
+    volumes:
+      - ./api/uploads:/app/uploads  # Persistencia de archivos
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mysql_db:
+    image: mysql:8.0  # Versión fija (evita surprises con 'latest')
+    container_name: sinaloa-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-1234}
+      MYSQL_DATABASE: sinaloa_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: ${DB_PASSWORD:-1234}
+    ports:
+      - "3306:3306"  # Puerto estándar (sin mapeo alternativo)
+    networks:
+      - sinaloa-net
+    volumes:
+      - ./db_data:/var/lib/mysql  # Persistencia de datos
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USER:-root}", "-p${DB_PASSWORD:-1234}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
+  sinaloa-frontend:
+    build: ./frontend/Calendar-React
+    ports:
+      - "3000:80"  # Nginx en producción
+      # - "5173:5173"  # Descomentar para desarrollo con Vite
+    networks:
+      - sinaloa-net
+
+networks:
+  sinaloa-net:
+    driver: bridge
