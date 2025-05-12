@@ -39,7 +39,7 @@ Definimos y guardamos nuestra contraseña (DigitalOcean no la enviara a nuestro 
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/6bf95d5b7b1623ae1e1a9ee93ffbe9ee3ecaac0e/screenshots/server/05%20-%20pass.png" alt="pass" width="600">
 
 <br>
 
@@ -47,7 +47,7 @@ Activamos opción para contar con métricas de monitoreo y alertas
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/06%20-%20free%20monitoring%20.png" alt="monitoring" width="600">
 
 <br>
 
@@ -56,15 +56,15 @@ Elegimos la cantidad de droplets a desplegar y lo creamos
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/07%20-%20resume.png" alt="complete" width="600">
 
 <br>
 
-Nos dirigimos en el panel izquierdo a Droplets, donde se listaran los que hayamos configurado
+Nos dirigimos desde el panel izquierdo a Droplets, donde se listaran los que hayamos configurado
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/08%20-%20list%20of%20droplets.png" alt="droplets" width="600">
 
 <br>
 
@@ -74,7 +74,7 @@ servidor ya esta corriendo, aunque puede demorar unos minutos al inicio.
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/09%20-%20our%20droplet.png" alt="my droplet" width="600">
 
 <br>
 
@@ -82,7 +82,7 @@ Nosotros no utilizaremos la consola web, se desconecta mucho, entre otras desven
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/10%20-%20putty.png" alt="putty" width="600">
 
 <br>
 
@@ -91,7 +91,7 @@ configurar el acceso remoto
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/11%20-%20open%20putty.png" alt="open putty" width="600">
 
 <br>
 
@@ -100,7 +100,7 @@ En la consola web nos conectaremos con el usuario root y crearemos nuevos usuari
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/12%20-%20add%20user.png" alt="adduser" width="600">
 
 <br>
 
@@ -110,23 +110,23 @@ privilegios de root con su -
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/13%20-%20create%20demo%20folder.png" alt="create dir" width="600">
 
 <br>
 
-Cpopiamos las llaves con los siguientes comandos y cambiamos propietario asi como el sistema de permisos
+Cpopiamos la llave pública con los siguientes comandos y cambiamos propietario asi como el sistema de permisos
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/14%20-%20copy%20public%20key.png" alt="public key" width="600">
 
 <br>
 
-Ahora si nos conectamos a través de putty ingresando la IP del servidor
+Ahora podemos conectarnos a través de putty, ingresando la IP del servidor
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/15%20-%20putty%20again.png" alt="ip" width="600">
 
 <br>
 
@@ -134,7 +134,7 @@ Ingresamos los datos del nuevo usuario y con su - obtenemos privilegios de root
 
 <br>
 
-<img src="" alt="" width="600">
+<img src="https://github.com/CristopherLodbrok117/host-deployment-with-docker/blob/fb837c36aada81ca2edd430108dd5396e4ce7539/screenshots/server/16%20-%20login.png" alt="login" width="600">
 
 <br>
 
